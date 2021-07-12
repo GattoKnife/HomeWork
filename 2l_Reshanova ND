@@ -1,0 +1,58 @@
+import Foundation
+//One
+func eveNumberfunc(diffNumber yourNumber: Int) {
+    let evenText: String = "Ваше число четное."
+    let noEventext: String = "Ваше число нечетное."
+    let result = (yourNumber % 2 == 0 ? evenText : noEventext)
+    print(result)
+}
+eveNumberfunc(diffNumber: 16)
+
+    //two
+func threeNumber(number userNumber: Int) {
+    let threeText: String = "Ваше число кратно трем."
+    let noThreetext: String = "Ваше число не делится на три."
+    let result = (userNumber % 3 == 0 ? threeText : noThreetext)
+    print(result)
+}
+threeNumber(number: 30)
+    
+//THREE
+let massive: [Int] = Array (1 ... 100)
+print(massive)
+    //FOUR
+var clearMassive: [Int] = []
+for i in massive{
+    if (i % 2 != 0 && i % 3 != 0){
+        clearMassive.append(i)
+    }
+}
+print(clearMassive)
+
+//FOUR #2 - нашла еще вот такой вариант в интернете, но не сама придумала. Он, конечно, короче в несколько раз.
+/*var newMassive = massive.filter {$0 % 2 != 0 && $0 % 3 != 0}
+print(newMassive)
+print(newMassive.count) 
+ */
+
+//FIVE
+//func fibonacci
+func fibonacciMassive(_ n: Int) -> [Double] {
+    var fibonacci: [Double] = [1, 1]
+    for i in 2 ... n {
+        fibonacci.append(fibonacci[i - 1] + fibonacci[i - 2])
+    }
+    return fibonacci
+}
+print(fibonacciMassive(50))
+
+    //SIX
+var workingMassive = Array(2 ... 545)
+var primesMassive: [Int] = []
+
+while let p = workingMassive.first {
+    primesMassive.append(p)
+    workingMassive = workingMassive.filter { $0 % p != 0 }
+}
+    print(primesMassive)
+print(primesMassive.count)
