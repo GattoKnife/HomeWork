@@ -1,5 +1,5 @@
 import Foundation
-//One
+//ONE HOHO
 func eveNumberfunc(diffNumber yourNumber: Int) {
     let evenText: String = "Ваше число четное."
     let noEventext: String = "Ваше число нечетное."
@@ -8,7 +8,7 @@ func eveNumberfunc(diffNumber yourNumber: Int) {
 }
 eveNumberfunc(diffNumber: 16)
 
-    //two
+    //TWO HOHO
 func threeNumber(number userNumber: Int) {
     let threeText: String = "Ваше число кратно трем."
     let noThreetext: String = "Ваше число не делится на три."
