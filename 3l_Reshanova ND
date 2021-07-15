@@ -1,0 +1,149 @@
+import Foundation
+// Легковая машина и Грузовик сделаны двумя разными способами. Пожалуйста, посмотрите оба кода, они не идентичны, и дайте обратную связь по обоим вариантам. Какой из них предпочтителен к использованию. Большое спасибо и хорошего дня!
+
+// VAR #1 - Легковая машина.
+print("VAR #2 SEDAN")
+enum SedanWindows: String {
+    case open = "open"
+    case close = "closed"
+}
+enum SedanEngine: String {
+    case on = "on"
+    case off = "off"
+}
+struct Sedan  {
+    var brand: String
+    var year: Int
+    var trunkVolume: Int
+    var engine: SedanEngine {
+        willSet {if engine == .on{
+            print("Now you can turn the engine \(engine.rawValue).")
+        } else {
+            print("Now you can turn the engine \(engine.rawValue).")
+        }
+        }
+    }
+    var windows: SedanWindows {
+        didSet {  if windows == .open {
+            print("Windows are \(windows.rawValue) now.")
+        } else {
+            print("Windows are \(windows.rawValue) now.")
+        }
+        }
+    }
+    var trunkFullness: Int
+    mutating func loadInTrunk(toLoad: Int) {
+        if trunkFullness + toLoad  > trunkVolume {
+            print("Gargo you want to load is too big")
+        } else {
+            self.trunkFullness += toLoad 
+            print("Fullness of your trunk is \(trunkFullness)lt now.")
+        }
+        }
+    mutating func unLoadTrunk(toUnload: Int) {
+        if toUnload > trunkFullness {
+            print("There is no enough cargo in the trunk.")
+        }else {
+            self.trunkFullness -= toUnload
+            print("Fullness of your trunk is \(trunkFullness)lt now.")
+        }
+    }
+    
+}
+var Kuga = Sedan(brand: "Kuga", year: 2020, trunkVolume: 460, engine: .off, windows: .close, trunkFullness: 200)
+Kuga.loadInTrunk(toLoad: 200)
+Kuga.windows = .open
+Kuga.engine = .on
+Kuga.loadInTrunk(toLoad: 200)
+print(Kuga.trunkFullness)
+
+Kuga.unLoadTrunk(toUnload: 420)
+Kuga.unLoadTrunk(toUnload: 150)
+print(Kuga.trunkFullness)
+
+    //VAR #2 ГРУЗОВИК
+print("VAR #2 TRUCK")
+enum Actions: String  {
+    case engineOn = "working"
+    case engineOff = "off"
+    case openWindows = "open"
+    case closeWindows = "closed"
+    case loadTrunk
+    case unloadTrunk
+}
+
+struct Truck {
+    let brand: String
+    let model: String
+    let year: Int
+    let trunkCapacity: Int
+    var loaded: Int
+    mutating func loadInTrunk(toLoad: Int?) {
+        if toLoad != nil { 
+            self.loaded += toLoad ?? 0 
+            if loaded  > trunkCapacity {
+                self.loaded -= toLoad ?? 0
+                print("You have not enough space for \((toLoad)!)lt in your trunk. You can load only \(trunkCapacity - loaded)lt")
+            } else {
+                print("Fullness of your trunk is \(loaded)lt now.")
+            }}
+    }
+    mutating func unLoadInTrunk(toUnLoad: Int?) {
+        if toUnLoad != nil { 
+            if loaded  < toUnLoad! {
+                print("You can't unload such a cargo. You have only \(loaded)lt in your trunk.")
+            } else {
+                self.loaded -= toUnLoad ?? 0 
+                print("Fullness of your trunk is \(loaded)lt now.")
+            }}
+    }
+    mutating func engineSet(statusSet: Actions) {
+        if statusSet == .engineOn {
+            print("Your engine is \(Actions.engineOn.rawValue) now.")
+        } else {
+            print("Your engine is \(Actions.engineOff.rawValue) now.")
+        }
+    }
+    mutating func windowSet(windowsAct: Actions)
+    {
+        if windowsAct == .openWindows{
+            print("Windows are \(Actions.openWindows.rawValue) now.")
+        }else {
+            print("Windows are \(Actions.closeWindows.rawValue) now.")
+        }       
+    }
+    mutating func performAction(action: Actions) {
+        switch action {
+        case .engineOn:
+            engineSet(statusSet: .engineOn)
+        case .engineOff:
+            engineSet(statusSet: .engineOff)
+        case .openWindows:
+            windowSet(windowsAct: .openWindows)
+        case .closeWindows:
+            windowSet(windowsAct: .closeWindows)
+        case .loadTrunk:
+            loadInTrunk(toLoad: <#T##Int?#>)
+        case .unloadTrunk:
+            unLoadInTrunk(toUnLoad: <#T##Int?#>)
+        }
+    }
+}
+var Kam = Truck(brand: "Kamaz", model: "Big", year: 2019, trunkCapacity: 12000, loaded: 5000)
+Kam.loadInTrunk(toLoad: 1000)
+Kam.loadInTrunk(toLoad: 1500)
+Kam.unLoadInTrunk(toUnLoad: 5000)
+print(Kam.loaded)
+Kam.performAction(action: Actions.engineOff)
+Kam.performAction(action: Actions.openWindows)
+Kam.engineSet(statusSet: .engineOn)
+Kam.engineSet(statusSet: .engineOff)
+Kam.windowSet(windowsAct: .closeWindows)
+Kam.loadInTrunk(toLoad: 12000)
+print(Kam.loaded)
+Kam.loadInTrunk(toLoad: 4000)
+Kam.unLoadInTrunk(toUnLoad: 7000)
+Kam.unLoadInTrunk(toUnLoad: 5000)
+
+var Zil = Truck(brand: "Zil", model: "455", year: 2001, trunkCapacity: 14000, loaded: 5000)
+Zil.engineSet(statusSet: .engineOn)
