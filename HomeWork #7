@@ -1,0 +1,107 @@
+import Foundation
+
+//Придумать класс, методы которого могут завершаться неудачей и возвращать либо значение, либо ошибку Error?. Реализовать их вызов и обработать результат метода при помощи конструкции if let, или guard let.
+
+enum BonusErrors: String, Error {
+    case notEnoughWorkingHours = "This avenger works less hours then needed for bonus."
+    case noSuchAvenger = "No such avanger in our list. Check the name please!"
+    case unLoyalAvenger = "This avenger is unloyal to us and don't deserves bonus."
+}
+
+class AvengersData {
+    
+    var avengersList = [
+        "thor"         : (name: "Thor Odinsson", workingHours: 25, loyalty: true),
+        "hulk"         : (name: "Bruce Banner", workingHours: 15, loyalty: true),
+        "blackWidow"   : (name: "Natasha Romanoff", workingHours: 24, loyalty: true),
+        "loki"         : (name: "Loki Laufeyson", workingHours: 55, loyalty: false)
+    ]
+    var minWorkingHours = 22
+    
+    func workigTime(toAvenger name: String) -> (BonusErrors?, Int?) {
+        guard let toAvenger = avengersList[name] else {
+            print("BonusErrors.noSuchAvenger")
+            return (BonusErrors.noSuchAvenger, nil)
+        } 
+        print("Avenger \(toAvenger.name) has worked \(toAvenger.workingHours) hours this month.")
+        return (nil, toAvenger.workingHours)
+    }
+    
+    func payBonus(toAvanger name: String, bonus: Int) ->  (BonusErrors?, Int?, String?) {
+        guard let toAvenger = avengersList[name] else { 
+            return (BonusErrors.noSuchAvenger, nil, nil)
+        }
+        guard toAvenger.workingHours > minWorkingHours else {
+            return (BonusErrors.notEnoughWorkingHours, nil, toAvenger.name)
+        }
+        
+        guard toAvenger.loyalty else {
+            return (BonusErrors.unLoyalAvenger, nil, toAvenger.name)
+        }
+        return (nil, bonus, toAvenger.name)    }
+}
+
+let avengers = AvengersData()
+var bonusPay = avengers.payBonus(toAvanger: "hulk", bonus: 200)
+if let bonus1 = bonusPay.1, let avname = bonusPay.2 {
+    print("Bonus paid to \(avname) in amount of \(bonus1) USD")
+} else if let error = bonusPay.0 {
+    print("Bonus rejected! \(error.rawValue)")
+}
+avengers.workigTime(toAvenger: "blackWidow")
+
+// Придумать класс, методы которого могут выбрасывать ошибки. Реализуйте несколько throws-функций. Вызовите их и обработайте результат вызова при помощи конструкции try/catch.
+
+enum LeagueBonusErrors: String, Error {
+    case notEnoughWorkingHours = "This league member works less hours then needed for bonus."
+    case noSuchLeagueMember = "No such league member in our list. Check the name please!"
+    case unLoyalLeagueMember = "This league member is unloyal to us and don't deserves bonus."
+}
+
+class JusticeLeague {
+    var leagueMembers = [
+        "wonderWoman" : (name: "Diana Prince", workingHours: 25, loyalty: true),
+        "batMan"      : (name: "Bruce Wane", workingHours: 15, loyalty: true),
+        "flash"       : (name: "Barry Allen", workingHours: 24, loyalty: true),
+        "jocker"      : (name: "Jack Napier", workingHours: 55, loyalty: false)
+    ]
+    var minWorkingHours = 22 
+    
+    
+    func bonusToLeague(toMember name: String) throws  {
+        guard let toMember = leagueMembers[name] else { 
+            throw LeagueBonusErrors.noSuchLeagueMember
+        }
+        guard toMember.workingHours > minWorkingHours else {
+            throw LeagueBonusErrors.notEnoughWorkingHours
+        }    
+        guard toMember.loyalty else {
+            throw LeagueBonusErrors.unLoyalLeagueMember
+        }
+        var bonus = (toMember.workingHours - minWorkingHours) * 250
+        print("\(toMember.name) get bonus in amount of \(bonus) USD")
+    }
+    
+}
+var payBonus = JusticeLeague()
+
+do {
+    try payBonus.bonusToLeague(toMember: "batMan")
+} catch LeagueBonusErrors.noSuchLeagueMember {
+    print("\(LeagueBonusErrors.noSuchLeagueMember.rawValue)")
+} catch LeagueBonusErrors.notEnoughWorkingHours {
+    print("\(LeagueBonusErrors.notEnoughWorkingHours.rawValue)")
+} catch LeagueBonusErrors.unLoyalLeagueMember {
+    print(LeagueBonusErrors.unLoyalLeagueMember.rawValue)
+}
+
+do {
+    try payBonus.bonusToLeague(toMember: "wonderWoman")
+} catch LeagueBonusErrors.noSuchLeagueMember {
+    print("\(LeagueBonusErrors.noSuchLeagueMember.rawValue)")
+} catch LeagueBonusErrors.notEnoughWorkingHours {
+    print("\(LeagueBonusErrors.notEnoughWorkingHours.rawValue)")
+} catch LeagueBonusErrors.unLoyalLeagueMember {
+    print(LeagueBonusErrors.unLoyalLeagueMember.rawValue)
+}
+
